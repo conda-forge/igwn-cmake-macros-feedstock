@@ -1,0 +1,53 @@
+schema_version: 1
+
+context:
+  name: igwn-cmake-macros
+  version: 1.7.0
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://software.igwn.org/sources/source/${{ name }}-${{ version }}.tar.gz
+  sha256: c180550a728e7ff2e28b74399873dd2bf88e462ffd3c88eb5c344d873625675c
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - cmake
+    - pkg-config
+    - if: win
+      then: ninja
+      else: make
+  run_constraints:
+    - igwn-cmake <0a0
+
+tests:
+  - package_contents:
+      files:
+        - if: win
+          then: Library/share/igwn-cmake/cmake/Modules/IGWNCMakeConfig.cmake
+          else: share/igwn-cmake/cmake/Modules/IGWNCMakeConfig.cmake
+  - requirements:
+      run:
+        - pkg-config
+    script:
+      - pkg-config --print-errors --exact-version "${{ version }}" igwncmake
+
+about:
+  summary: This is a collection of CMake functions used as a replacement for autoconf macros
+  description: |
+    This is a collection of macros and scripts that were developed to aid
+    in the process of converting Autotools based projects into CMake.
+  homepage: https://git.ligo.org/ldastools/igwn-cmake
+  repository: https://git.ligo.org/ldastools/igwn-cmake.git
+  license: GPL-2.0-or-later
+  license_file: COPYING
+
+extra:
+  recipe-maintainers:
+    - duncanmmacleod
+    - emaros

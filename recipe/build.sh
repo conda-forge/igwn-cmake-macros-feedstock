@@ -7,18 +7,17 @@ pushd _build
 
 # configure
 cmake \
-	${SRC_DIR} \
-	${CMAKE_ARGS} \
-	-DCMAKE_BUILD_TYPE:STRING=Release \
-	-DCMAKE_INSTALL_PREFIX:PATH=${PREFIX} \
-;
+  ${CMAKE_ARGS} \
+  -DCMAKE_BUILD_TYPE:STRING=Release \
+  -DCMAKE_INSTALL_PREFIX:PATH=${PREFIX} \
+  ${SRC_DIR}
 
 # build
 cmake --build . --verbose --parallel ${CPU_COUNT}
 
 # test
 if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" ]]; then
-	ctest --verbose --parallel ${CPU_COUNT}
+ctest --verbose --parallel ${CPU_COUNT}
 fi
 
 # install
