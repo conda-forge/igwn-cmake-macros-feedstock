@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: igwn-cmake-macros
-  version: 1.7.0
+  version: "1.8.0"
 
 package:
   name: ${{ name|lower }}
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://software.igwn.org/sources/source/${{ name }}-${{ version }}.tar.gz
-  sha256: c180550a728e7ff2e28b74399873dd2bf88e462ffd3c88eb5c344d873625675c
+  sha256: 80014e31841f5ea56b1e9dd2604d486db232a9a07cd72f7c2a3c6491c91b3742
 
 build:
   number: 0
