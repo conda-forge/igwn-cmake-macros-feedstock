@@ -11,6 +11,8 @@ package:
 source:
   url: https://software.igwn.org/sources/source/${{ name }}-${{ version }}.tar.gz
   sha256: 4aa893f888326223cf1652109041461dcc2180ed956d3508d285874fb592af6a
+  patches:
+    - 0001-tests-cm_init-unset-CMAKE_GENERATOR-for-child-cmake.patch
 
 build:
   number: 0
