@@ -22,8 +22,8 @@ requirements:
     - if: win
       then: ninja
       else: make
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
   run_constraints:
     - igwn-cmake <0a0
 
