@@ -1,0 +1,48 @@
+From 266545d41404e9c2aab1ef1981fc38e8f8358468 Mon Sep 17 00:00:00 2001
+From: Edward Maros <ed.maros@ligo.org>
+Date: Fri, 29 May 2026 09:01:40 -0700
+Subject: [PATCH] tests(cm_init): unset CMAKE_GENERATOR in scenario child cmake
+
+The conda-forge feedstock build (notably win-64) pre-sets
+CMAKE_GENERATOR in the build environment. That value is correct for
+the main package build, but is inherited by the scratch mini-project
+cmake invocations spawned from run_configure_scenario, where the
+specified generator is not necessarily resolvable -- failing the test
+with "CMAKE_GENERATOR was set but the specified generator doesn't
+exist".
+
+The seven scenarios in cm_init_configure_test do not build anything
+(every project() line uses LANGUAGES NONE except scenario 7 which
+uses plain C with no build), so any default generator the child cmake
+picks is fine. Drop the inherited override via `cmake -E env
+--unset=CMAKE_GENERATOR` before invoking the child cmake.
+---
+ tests/cm_init_configure_test.cmake | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/tests/cm_init_configure_test.cmake b/tests/cm_init_configure_test.cmake
+index 61bbd66..bfe6232 100644
+--- a/tests/cm_init_configure_test.cmake
++++ b/tests/cm_init_configure_test.cmake
+@@ -62,8 +62,17 @@ function(run_configure_scenario scenario_label project_line cm_init_line)
+     "message(STATUS \"RESULT PROJECT_DESCRIPTION=\${PROJECT_DESCRIPTION}\")\n"
+     "message(STATUS \"RESULT PROJECT_HOMEPAGE_URL=\${PROJECT_HOMEPAGE_URL}\")\n"
+     )
++  # Unset CMAKE_GENERATOR in the child env: conda-forge feedstock builds
++  # (notably win-64) pre-set CMAKE_GENERATOR in the build environment to
++  # a value that is correct for the main project build but is not
++  # necessarily resolvable from the scratch mini-projects this test
++  # spawns. The scenarios here do not build anything (LANGUAGES NONE or
++  # plain C), so any default generator picked by the child cmake is fine
++  # -- we just need to stop the inherited override from forcing one that
++  # the child cannot find.
+   execute_process(
+-    COMMAND ${CMAKE_COMMAND}
++    COMMAND ${CMAKE_COMMAND} -E env --unset=CMAKE_GENERATOR
++      ${CMAKE_COMMAND}
+       "-DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}"
+       -S "${src_dir}"
+       -B "${build_dir}"
+--
+2.51.1
+
