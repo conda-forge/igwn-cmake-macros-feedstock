@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: igwn-cmake-macros
-  version: "1.9.0"
+  version: "1.10.0"
 
 package:
   name: ${{ name|lower }}
@@ -10,7 +10,9 @@ package:
 
 source:
   url: https://software.igwn.org/sources/source/${{ name }}-${{ version }}.tar.gz
-  sha256: db4cc624754d294898ad352fb663120f2c374051422b77ca8cf8ba683ed90ff2
+  sha256: 4aa893f888326223cf1652109041461dcc2180ed956d3508d285874fb592af6a
+  patches:
+    - 0001-tests-cm_init-unset-CMAKE_GENERATOR-for-child-cmake.patch
 
 build:
   number: 0
@@ -22,6 +24,9 @@ requirements:
     - if: win
       then: ninja
       else: make
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib("c") }}
   run_constraints:
     - igwn-cmake <0a0
 
