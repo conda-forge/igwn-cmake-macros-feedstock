@@ -26,6 +26,7 @@ requirements:
       else: make
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
+    - ${{ stdlib("c") }}
   run_constraints:
     - igwn-cmake <0a0
 
