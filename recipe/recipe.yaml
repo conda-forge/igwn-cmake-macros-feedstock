@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: igwn-cmake-macros
-  version: "1.10.0"
+  version: "1.11.0"
 
 package:
   name: ${{ name|lower }}
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://software.igwn.org/sources/source/${{ name }}-${{ version }}.tar.gz
-  sha256: 4aa893f888326223cf1652109041461dcc2180ed956d3508d285874fb592af6a
+  sha256: 7d96c71e77c78c560e72a814594693024b6df3521736c561f9ab106922974cf8
   patches:
     - 0001-tests-cm_init-unset-CMAKE_GENERATOR-for-child-cmake.patch
 
